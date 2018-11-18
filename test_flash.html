@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <style>
+            #main {
+                height:100%;
+                width:100%;
+                background: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="main">
+        </div>
+    <script>
+        morse_block = [1,0,1,0,1,0,0,0,1,1,1,0,1,1,1,0,1,1,1,0,0,0,1,0,1,0,1,0];
+        pos = 0;
+
+        function ditdah() {
+            console.log ('.');
+            if (pos <= morse_block.length) {
+                elt = document.getElementById('main');
+                if (morse_block[pos] == 1) {
+                    elt.style.background = 'white';
+                    console.log ('on');
+                } else {
+                    elt.style.background = 'black';
+                    console.log ('off');
+                }
+                pos += 1;
+            }
+        }
+
+        var t = setInterval(ditdah, 500);
+
+    </script>
+    </body>
+</html>
+
