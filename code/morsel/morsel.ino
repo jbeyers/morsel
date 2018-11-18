@@ -1,15 +1,21 @@
 // Basic Morsel code
+const int env_length = 20;
 float ll;
 int rr;
 float avg;
 unsigned long prev;
 unsigned long current;
 float alpha = 0.01;
-float alpha2 = 0.0001;
 float envtop = 0.0;
 float envbot = 0.0;
 float mid = 0.0;
 int pulse = 200;
+int envelope[env_length] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int env_index = 0;
+int avg_int;
+int env_max;
+int env_min;
+int i;
 
 void setup() { 
   Serial.begin(9600);
@@ -17,6 +23,8 @@ void setup() {
   rr = 0;
   avg = 0;
   prev = millis();
+  env_max = 0;
+  env_min = 0;
 } 
 
 void loop() { 
@@ -27,27 +35,35 @@ void loop() {
     rr += 1;
     if (rr > 99) {
       rr = 0;
-      Serial.print(int(avg));
+      avg_int = int(avg);
+      envelope[env_index] = avg_int;
+      env_max = 0;
+      env_min = 2000;
+      for (i = 0; i < env_length; i++) {
+        env_max = max(env_max, envelope[i]);
+        env_min = min(env_min, envelope[i]);
+      }
+      env_index += 1;
+      if (env_index == env_length) {
+        env_index = 0;
+      }
+      Serial.print(int(ll));
       Serial.print(" ");
-      Serial.print(int(envtop));
+      Serial.print(avg_int);
       Serial.print(" ");
       Serial.print(pulse);
       Serial.print(" ");
-      Serial.println(int(envbot));
+      Serial.println(mid);
     }
     avg += alpha * (ll - avg);
-    envtop += alpha2 * (ll - envtop);
-    envbot += alpha2 * (ll - envbot);
-    envtop = max(envtop, avg);
-    envbot = min(envbot, avg);
-    mid = (envtop+envbot)/2;
+    mid =(env_max + env_min)/2;
     if (avg > mid) {
-      pulse = 200;
+      pulse = env_max;
     } else {
-      pulse = 160;
+      pulse = env_min;
     }
-    if (envtop < envbot + 20.0) {
-      pulse = 180;
+    if (env_max - env_min < 20.0) {
+      pulse = mid;
     }
   }
   prev = current;
