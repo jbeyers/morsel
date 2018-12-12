@@ -12,7 +12,7 @@
         <div id="main">
         </div>
     <script>
-        morse_block = [1,0,1,0,1,0,0,0,1,1,1,0,1,1,1,0,1,1,1,0,0,0,1,0,1,0,1,0];
+        morse_block = [1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,1,0,1,0,1,0,0,0,1,1,1,0,1,1,1,0,1,1,1,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0];
         pos = 0;
 
         function ditdah() {
@@ -27,10 +27,12 @@
                     console.log ('off');
                 }
                 pos += 1;
+            } else {
+                pos = 0;
             }
         }
 
-        var t = setInterval(ditdah, 500);
+        var t = setInterval(ditdah, 200);
 
     </script>
     </body>
